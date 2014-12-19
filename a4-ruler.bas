@@ -71,24 +71,24 @@ sub main()
     next i ' }
 
     dim n as long: n=0
-    for i = 10 * pw  to 10 * 2 * mg step -1  ' {
+    for i = 0 to 10 * (pw-2*mg) ' {
 
         if     i mod 10 = 0 then
 
-               call line(i/10, ph-mg, i/10, ph-mg-ln_cm, wg_cm)
+               call line(pw-i/10, ph-mg, pw-i/10, ph-mg-ln_cm, wg_cm)
 
                if n > 0 then
-                  call text(n, i/10, ph-mg-ln_cm-1, "h")
+                  call text(n, pw-i/10, ph-mg-ln_cm-1, "h")
                end if
                n = n+1
 
         elseif i mod  5 = 0 then
 
-               call line(i/10, ph-mg, i/10, ph-mg-ln_c2, wg_c2)
+               call line(pw-i/10, ph-mg, pw-i/10, ph-mg-ln_c2, wg_c2)
 
         else
 
-               call line(i/10, ph-mg, i/10, ph-mg-ln_mm, wg_mm)
+               call line(pw-i/10, ph-mg, pw-i/10, ph-mg-ln_mm, wg_mm)
 
         end if
 
@@ -120,14 +120,14 @@ sub main()
     next i ' }
 
     n = 0
-    for i = 10*ph to 10*2*mg step -1 ' {
+    for i = 0 to 10 * (ph-2*mg) ' {
 
         if     i mod 10 = 0 then
 
-               call line(mg, i/10, mg+ln_cm, i/10, wg_cm)
+               call line(mg, ph-i/10, mg+ln_cm, ph-i/10, wg_cm)
 
                if n > 0 then
-                  call text(n, mg+ln_cm, i/10, "v")
+                  call text(n, mg+ln_cm, ph-i/10, "v")
                end if
               
                n = n+1
@@ -135,11 +135,11 @@ sub main()
 
         elseif i mod  5 = 0 then
 
-               call line(mg, i/10, mg+ln_c2, i/10, wg_c2)
+               call line(mg, ph-i/10, mg+ln_c2, ph-i/10, wg_c2)
 
         else
 
-               call line(mg, i/10, mg+ln_mm, i/10, wg_mm)
+               call line(mg, ph-i/10, mg+ln_mm, ph-i/10, wg_mm)
 
         end if
 
