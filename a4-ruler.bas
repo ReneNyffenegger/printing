@@ -29,7 +29,7 @@ sub main()
 
   ' ---
 
-    dim mg    as double: mg    = 2
+    dim mg    as double: mg    = 1.5
     dim wg    as double: wg    = 2
     dim wg_mm as double: wg_mm = 0.2
     dim wg_c2 as double: wg_c2 = 0.3
@@ -45,13 +45,18 @@ sub main()
 
   ' ---
 
-    dim i as long
+    dim i   as long
+    dim lbl as shape
 
     for i = 0 to 10 * ( pw-2*mg ) ' {
 
         if     i mod 10 = 0 then
 
                call line(i/10, mg, i/10, mg+ln_cm, wg_cm)
+
+               if i > 0 then
+                  call text(i/10, i/10, mg+ln_cm, "h")
+               end if
 
         elseif i mod  5 = 0 then
 
@@ -65,11 +70,17 @@ sub main()
 
     next i ' }
 
+    dim n as long: n=0
     for i = 10 * pw  to 10 * 2 * mg step -1  ' {
 
         if     i mod 10 = 0 then
 
                call line(i/10, ph-mg, i/10, ph-mg-ln_cm, wg_cm)
+
+               if n > 0 then
+                  call text(n, i/10, ph-mg-ln_cm-1, "h")
+               end if
+               n = n+1
 
         elseif i mod  5 = 0 then
 
@@ -83,11 +94,18 @@ sub main()
 
     next i ' }
 
+    n = 0
     for i = 0 to 10 * (ph - 2*mg) ' {
 
         if     i mod 10 = 0 then
 
                call line(pw-mg, i/10, pw-mg-ln_cm, i/10, wg_cm)
+               
+               if n > 0 then
+                  call text(n, pw-mg-ln_cm-1, i/10, "v")
+               end if
+              
+               n = n+1
 
         elseif i mod  5 = 0 then
 
@@ -101,11 +119,19 @@ sub main()
 
     next i ' }
 
+    n = 0
     for i = 10*ph to 10*2*mg step -1 ' {
 
         if     i mod 10 = 0 then
 
                call line(mg, i/10, mg+ln_cm, i/10, wg_cm)
+
+               if n > 0 then
+                  call text(n, mg+ln_cm, i/10, "v")
+               end if
+              
+               n = n+1
+
 
         elseif i mod  5 = 0 then
 
@@ -124,7 +150,7 @@ sub main()
 end sub
 
 
-private sub line(xs as double, ys as double, xe as double, ye as double, w as double)
+private sub line(xs as double, ys as double, xe as double, ye as double, w as double) ' {
 
     dim line_ as shape
 
@@ -138,5 +164,45 @@ private sub line(xs as double, ys as double, xe as double, ye as double, w as do
     line_.line.weight = w * 2
 
 
-end sub
+end sub ' }
 
+private sub text(txt as long, x as double, y as double, vert_or_horiz as string) ' {
+
+   dim lbl as shape
+
+   dim adj_v as double
+   dim adj_h as double
+
+   if vert_or_horiz = "h" then
+      adj_h = -0.5
+      adj_v =  0
+   else
+      adj_h =  0
+      adj_v = -0.5
+   end if
+      
+
+   set lbl = ad_sh.addLabel(msoTextOrientationHorizontal, centimetersToPoints(x+adj_h), centimetersToPoints(y+adj_v), centimetersToPoints(1), centimetersToPoints(1))
+
+   lbl.textFrame.autoSize       = false
+   lbl.textFrame.textRange.text = txt
+   lbl.TextFrame.textRange.paragraphFormat.Alignment      = wdAlignParagraphCenter
+   lbl.textFrame.textRange.paragraphFormat.spaceAfter     = 0
+
+   lbl.textFrame.marginLeft     = centimetersToPoints(0)
+   lbl.textFrame.marginRight    = centimetersToPoints(0)
+   lbl.textFrame.marginTop      = centimetersToPoints(0)
+   lbl.textFrame.marginBottom   = centimetersToPoints(0)
+
+   lbl.textFrame.verticalAnchor = msoAnchorMiddle
+
+   lbl.line.visible = false
+
+
+
+ ' Why is this even necessary???
+ 
+   doEvents
+   lbl.width = centimetersToPoints(1)
+
+end sub ' }
